@@ -10,13 +10,14 @@ import {HttpClientModule} from "@angular/common/http";
 import {RouterModule, Routes} from "@angular/router";
 import { PostFormComponent } from './post-form/post-form.component';
 import { FourOhFourComponent } from './four-oh-four/four-oh-four.component';
+import {PostsService} from "./services/posts.service";
 
 const appRoutes: Routes = [
   {path: 'posts' , component: PostListComponent},
   {path: 'new' , component: PostFormComponent},
-  {path: '' , component: PostListComponent},
-  {path: 'not-found' , component: FourOhFourComponent},
-  {path: '**' , redirectTo: '/not-found'}
+  //{path: '' , redirectTo: '/posts', pathMatch: 'full'},
+  //{path: 'not-found' , component: FourOhFourComponent},
+ // {path: '**' , redirectTo: '/not-found'}
 ]
 
 @NgModule({
@@ -34,7 +35,9 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [
+    PostsService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
