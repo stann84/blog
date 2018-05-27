@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
-import {Post} from "../models/post.models";
-import {Subject} from "rxjs/Subject";
-import * as firebase from "firebase";
+import {Post} from '../models/post.models';
+import {Subject} from 'rxjs/Subject';
+import * as firebase from 'firebase';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class PostsService {
 
-  posts: Post [];
+  posts: Post [] = [] ;
   postsSubject = new Subject<Post[]>();
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) {}
+
 // emite des posts
   emitPosts() {
     this.postsSubject.next(this.posts);
@@ -29,7 +31,7 @@ export class PostsService {
   }
 
   // créer un nouveau post
-  createNewPost(newPost : Post){
+  createNewPost(newPost: Post){
     this.posts.push(newPost);
     this.savePosts();
     this.emitPosts();
@@ -47,4 +49,17 @@ export class PostsService {
     this.savePosts();
     this.emitPosts();
   }
-}
+  savePostsToServer () {
+    // httpClient envoie les données vers le serveur dans le node.json qui créer posts
+    this.httpClient
+      .put('https://blog-7bd4e.firebaseio.com/posts.json' , this.posts )
+      // on créer le serie de réponse du serveur
+      .subscribe(
+        () => {
+          console.log ('chargement terminé !');
+        },
+        (error) => {
+          console.log('erreur' + error);
+        }
+      );
+}}

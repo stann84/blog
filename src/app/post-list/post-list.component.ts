@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Post} from "../models/post.models";
 import {Subscription} from "rxjs/Subscription";
 import {PostsService} from "../services/posts.service";
@@ -8,14 +8,22 @@ import {Router} from "@angular/router";
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss']
-})
+  })
+
+
 export class PostListComponent implements OnInit, OnDestroy {
+
+  @Input() title:string;
+  @Input() content:string;
+  @Input() loveIts:number;
+
 
   // on créer l'array local
   posts: Post [];
   postsSubscription: Subscription;
 
-  constructor(private postsService: PostsService, private router: Router) {
+  constructor(private postsService: PostsService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -24,6 +32,7 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.posts = posts;
       }
     );
+    this.postsService.getPosts();
     this.postsService.emitPosts();
   }
 
@@ -35,6 +44,15 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.postsService.removePost(post);
     console.log(post);
   }
+
+  onLike(){
+  this.loveIts ++ ;
+  }
+
+  onDislike(){
+    this.loveIts -- ;
+  }
+
   ngOnDestroy(){
     this.postsSubscription.unsubscribe()
   }
