@@ -4,10 +4,11 @@ import {Subject} from 'rxjs/Subject';
 import * as firebase from 'firebase';
 import {HttpClient} from "@angular/common/http";
 
+
 @Injectable()
 export class PostsService {
 
-  posts: Post [] = [] ;
+  posts: Post []= [] ;
   postsSubject = new Subject<Post[]>();
 
   constructor(private httpClient: HttpClient) {}
@@ -30,7 +31,7 @@ export class PostsService {
       );
   }
 
-  // créer un nouveau post
+   // créer un nouveau post
   createNewPost(newPost: Post){
     this.posts.push(newPost);
     this.savePosts();
@@ -48,6 +49,9 @@ export class PostsService {
     this.posts.splice(postIndexToRemove, 1);
     this.savePosts();
     this.emitPosts();
+  }
+  like(){
+    console.log(this.posts);
   }
   savePostsToServer () {
     // httpClient envoie les données vers le serveur dans le node.json qui créer posts
